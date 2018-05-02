@@ -1,0 +1,13 @@
+version: '2'
+
+volumes:
+  file_storage:
+
+services:
+  server:
+    build: build/
+    restart: unless-stopped
+    volumes:
+      - file_storage:/var/www/dl
+    ports:
+      - 127.0.0.1:8023:80
