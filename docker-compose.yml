@@ -11,3 +11,8 @@ services:
       - file_storage:/var/www/dl
     ports:
       - 127.0.0.1:8023:80
+  cron:
+    build: cron/
+    restart: unless-stopped
+    volumes_from:
+      - server
