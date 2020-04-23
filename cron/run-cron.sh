@@ -8,7 +8,7 @@ fi
 
 CURRENT_TS=$(date '+%s')
 find "${DL_DIR}" -type f -name "expires-at-*" | while read expires_file; do
-  # /var/www/dl/c1984d98fcc6/expires-at-1585729013
+  # /var/www/dl/2f6d5c47b014c1973f2d4f846303349d/expires-at-1585729013
   TS=$(basename ${expires_file} | sed -E 's/^expires-at-(\d+)$/\1/g')
   if [ $(echo ${TS} | grep -q '^\d\+$') -gt 0 ]; then
     continue;

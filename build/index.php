@@ -4,11 +4,11 @@ if(!isset($_FILES['file'])) {
 <html><head><meta http-equiv="content-type" content="text/html; charset=UTF-8" /><title>file sharing</title>
 <style type="text/css">
 a {
-	color: black;
-	text-decoration: underline;
+  color: black;
+  text-decoration: underline;
 }
 a:hover {
-	color: #666;
+  color: #666;
 }
 </style>
 </head><body>
@@ -19,11 +19,11 @@ a:hover {
 </body></html>
 <?php
 } else {
-	$newFName = preg_replace('/[^a-z0-9\._\-]/i', '_', $_FILES['file']['name']);
-	$basedir = realpath('../dl');
-	$newdir = substr(md5(uniqid()), 0, 12);
-	mkdir($basedir.'/'.$newdir);
-	move_uploaded_file($_FILES['file']['tmp_name'], $basedir.'/'.$newdir.'/'.$newFName);
+  $newFName = preg_replace('/[^a-z0-9\._\-]/i', '_', $_FILES['file']['name']);
+  $basedir = realpath('../dl');
+  $newdir = bin2hex(random_bytes(16));
+  mkdir($basedir.'/'.$newdir);
+  move_uploaded_file($_FILES['file']['tmp_name'], $basedir.'/'.$newdir.'/'.$newFName);
   if (isset($_REQUEST['exp'])) {
     preg_match('/^(\d+)([hdwmy]?)$/', $_REQUEST['exp'], $matches);
     if ($matches[1] && $matches[2]) {
