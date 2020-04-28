@@ -1,8 +1,9 @@
 <?php
 if(!isset($_FILES['file'])) {
 ?>
-<html><head><meta http-equiv="content-type" content="text/html; charset=UTF-8" /><title>file sharing</title>
-<style type="text/css">
+<!DOCTYPE html>
+<html lang="en"><head><meta http-equiv="content-type" content="text/html; charset=UTF-8" /><title>file sharing</title>
+<style>
 a {
   color: black;
   text-decoration: underline;
