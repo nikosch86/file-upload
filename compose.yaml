@@ -1,5 +1,3 @@
-version: '2'
-
 volumes:
   file_storage:
 
