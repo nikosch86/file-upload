@@ -12,5 +12,5 @@ services:
   cron:
     build: ../cron/
     restart: "no"
-    volumes_from:
-      - server
+    volumes:
+      - file_storage_test:/var/www/dl
