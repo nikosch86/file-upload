@@ -54,7 +54,7 @@ upload() {
   fi
 }
 
-to_local_url() { echo "$1" | sed -E "s|^https://[^/]+|${BASE_URL}|"; }
+to_local_url() { echo "$1" | sed -E "s|^https?://[^/]+|${BASE_URL}|"; }
 extract_hex()  { echo "$1" | sed -E 's|.*/dl/([a-f0-9]+)/.*|\1|'; }
 extract_name() { echo "$1" | sed -E 's|.*/dl/[a-f0-9]+/(.*)$|\1|'; }
 
@@ -80,7 +80,7 @@ curl -sf "${BASE_URL}/" >/dev/null || fail "server failed to start"
 info "Test 1: basic upload + download"
 echo "hello world" > "${TEST_DIR}/test.txt"
 URL=$(upload "${TEST_DIR}/test.txt")
-assert_match '^https://[^/]+/dl/[a-f0-9]{32}/test\.txt$' "${URL}" "URL format"
+assert_match '^https?://[^/]+/dl/[a-f0-9]{32}/test\.txt$' "${URL}" "URL format"
 
 LOCAL_URL=$(to_local_url "${URL}")
 DOWNLOADED=$(curl -sf "${LOCAL_URL}")

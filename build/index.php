@@ -27,8 +27,15 @@ a:hover {
   }
   $basedir = realpath('../dl');
   $newdir = bin2hex(random_bytes(16));
-  mkdir($basedir.'/'.$newdir);
-  move_uploaded_file($_FILES['file']['tmp_name'], $basedir.'/'.$newdir.'/'.$newFName);
+  if (!@mkdir($basedir.'/'.$newdir, 0755)) {
+    http_response_code(500);
+    exit("upload failed\n");
+  }
+  if (!move_uploaded_file($_FILES['file']['tmp_name'], $basedir.'/'.$newdir.'/'.$newFName)) {
+    @rmdir($basedir.'/'.$newdir);
+    http_response_code(500);
+    exit("upload failed\n");
+  }
   if (isset($_REQUEST['exp']) && preg_match('/^(\d+)([hdwmy])$/', $_REQUEST['exp'], $matches) === 1) {
     switch ($matches[2]) {
       case 'h':
@@ -50,7 +57,10 @@ a:hover {
     $expiry = time() + ($hours * 60 * 60);
     touch($basedir.'/'.$newdir.'/expires-at-'.$expiry);
   }
-  echo "https://".$_SERVER['HTTP_HOST']."/dl/".$newdir."/".$newFName;
+  $scheme = $_SERVER['HTTP_X_FORWARDED_PROTO']
+         ?? $_SERVER['REQUEST_SCHEME']
+         ?? 'https';
+  echo $scheme."://".$_SERVER['HTTP_HOST']."/dl/".$newdir."/".$newFName;
   echo "\n";
 }
 ?>
