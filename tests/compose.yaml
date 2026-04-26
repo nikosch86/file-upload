@@ -1,0 +1,16 @@
+volumes:
+  file_storage_test:
+
+services:
+  server:
+    build: ../build/
+    restart: "no"
+    volumes:
+      - file_storage_test:/var/www/dl
+    ports:
+      - "127.0.0.1:18024:80"
+  cron:
+    build: ../cron/
+    restart: "no"
+    volumes_from:
+      - server

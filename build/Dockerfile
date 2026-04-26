@@ -1,4 +1,4 @@
-FROM php:7-apache
+FROM php:8.4-apache
 
 RUN a2enmod headers && a2enmod remoteip
 

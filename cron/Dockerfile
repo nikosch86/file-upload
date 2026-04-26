@@ -1,4 +1,4 @@
-FROM alpine:3
+FROM alpine:3.22
 
 RUN apk add bash dcron
 RUN mkdir -p /var/logs
