@@ -13,7 +13,22 @@ the duration expressions supported are:
 * m - months
 * y - years
 
-they can not combined as of now, only one may be used, the default is to not expire the upload, like before the addition of this feature.
+they can not combined as of now, only one may be used.
+
+an `exp` value that does not parse is rejected with `400` and nothing is stored, so a typo can not silently produce a permanent upload. zero durations and anything beyond 100 years are rejected too — an unbounded value overflows the expiry timestamp and produces a marker the cleaner can not read, which would quietly make the upload permanent.
+
+## configuration
+
+| env var | default | meaning |
+| --- | --- | --- |
+| `DEFAULT_EXPIRY` | unset | expiry applied when the request carries no `exp`, same syntax as `exp`. unset means uploads never expire |
+| `TRUSTED_PROXIES` | `192.168.0.0/16` | space separated list of IPs/CIDRs whose `X-Forwarded-For` is believed, for real client IPs in the access log |
+
+both are validated at startup, the container refuses to start on a bad value rather than quietly serving without retention.
+
+`DEFAULT_EXPIRY` is unset by default so an upgrade never silently adds a retention policy. on a public instance you almost certainly want to set it: without it, uploads made through the web form are permanent, since the form only sends `exp` when you pick one.
+
+note that it applies to new uploads only. the expiry marker is written at upload time, so uploads that already exist have no marker and are never touched retroactively — turning `DEFAULT_EXPIRY` on bounds future growth, it does not reclaim what is already on disk.
 
 the marker for expiration is simply a file adhering to a naming convention indiciating the unix timestamp of expiry.
 

@@ -9,6 +9,17 @@ services:
       - file_storage_test:/var/www/dl
     ports:
       - "127.0.0.1:18024:80"
+  # Same image, but with retention and multiple trusted proxy ranges configured.
+  server_ttl:
+    build: ../build/
+    restart: "no"
+    environment:
+      DEFAULT_EXPIRY: 1d
+      TRUSTED_PROXIES: 172.16.0.0/12 10.0.0.0/8
+    volumes:
+      - file_storage_test:/var/www/dl
+    ports:
+      - "127.0.0.1:18025:80"
   cron:
     build: ../cron/
     restart: "no"
